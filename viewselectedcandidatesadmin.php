@@ -1,0 +1,52 @@
+<?php
+if(!isset($_SESSION)){
+session_start();
+}
+include("header.php");
+include("dbconnection.php");
+?>
+      <div class="row space30"> <!-- row 1 begins -->
+
+<?php
+$rsfetch['FirstName'] = "";
+$rsfetch['LastName'] = "";
+$rsfetch['CourseName'] = "";
+$rsfetch['CompanyName'] = "";
+$rsfetch['Title'] = "";
+$rsfetch['stimg'] = "";
+
+$sql = "SELECT * FROM  selectedCdatetraining INNER JOIN students INNER JOIN course INNER JOIN trainingprogram INNER JOIN companies ON selectedCdatetraining.RegNo = students.RegNo AND course.CourseId=students.CourseId AND trainingprogram.TrainingId=selectedCdatetraining.TrainingId AND companies.CompanyId=trainingprogram.CompanyId";
+$sqlquery = mysqli_query($con,$sql);
+while($rsfetch = mysqli_fetch_array($sqlquery))
+{
+?>      
+            <div class="col-xs-6 col-sm-3">
+              	<h2><?php echo ucfirst($rsfetch['FirstName']). " " . ucfirst($rsfetch['LastName']); ?></h2>
+                <?php
+				if($rsfetch['stimg'] == "")
+				{
+				?>
+              	<img src="images/defaultimg.jpg" alt="Image 1" class="img-responsive img-rounded img_left" border="5"  height="300" width="260" />
+                <?php
+				}
+				else
+				{
+				?>
+                <img src="uploadedfiles/<?php echo $rsfetch['stimg']; ?>" alt="Image 1" class="img-responsive img-rounded img_left" border="5"  height="300" width="260" />
+                <?php
+				}
+				?>
+              	<h4>Qualification: <?php echo $rsfetch['CourseName']; ?> </h4>
+                 <h4>Company Name: <?php echo ucfirst($rsfetch['CompanyName']); ?> </h4>
+                <h4>Training Program: <?php echo $rsfetch['Title']; ?> </h4>
+            </div>
+        
+ <?php
+ }
+ ?>         
+      </div> <!-- /row 1 -->
+      
+       <!-- /row 2 -->
+    <?php
+	include("footer.php");
+	?>
